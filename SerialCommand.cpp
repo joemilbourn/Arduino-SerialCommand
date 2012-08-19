@@ -30,7 +30,8 @@ SerialCommand::SerialCommand()
   : commandList(NULL),
     commandCount(0),
     defaultHandler(NULL),
-    term('\n'),           // default terminator for commands, newline character
+    term('\r'),           // default terminator for commands, newline character
+	echo(1),
     last(NULL)
 {
   strcpy(delim, " "); // strtok_r needs a null-terminated string
@@ -76,6 +77,10 @@ void SerialCommand::readSerial() {
     #ifdef SERIALCOMMAND_DEBUG
       Serial.print(inChar);   // Echo back to serial stream
     #endif
+
+	if (echo) {
+		Serial.print(inChar);
+	}
 
     if (inChar == term) {     // Check for the terminator (default '\r') meaning end of command
       #ifdef SERIALCOMMAND_DEBUG
